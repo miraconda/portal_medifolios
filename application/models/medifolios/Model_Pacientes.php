@@ -11,20 +11,14 @@ class Model_Pacientes extends CI_Model{
         );
         
         #Dependiendo de la entidad validamos parametros
-        $servidor = "";
-        $codEmpresa = "";
-        switch ($entidad) {
-            case "neumovida_armenia":
-                $codEmpresa = "MDAwMDAwMDAwMDA5MDA2ODA5NzQ1OA%253D%253D";
-                $servidor = "www.server3medifolios.net";
-                break;
-
-        }//switch               
+        $this->load->model("medifolios/Model_Credenciales");
+        $this->Model_Credenciales->crearCredenciales($entidad);
+        $credenciales = $this->Model_Credenciales->credenciales;         
  
         #Iniciamos cUrl
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://".$servidor."/index.php/api_pacientes/get_method/".$codEmpresa."/cargar_paciente_solo_identificacion",
+            CURLOPT_URL => "http://".$credenciales["servidor"]."/index.php/api_pacientes/get_method/".$credenciales["codEmpresa"]."/cargar_paciente_solo_identificacion",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
