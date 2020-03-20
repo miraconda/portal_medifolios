@@ -1,0 +1,14 @@
+#Archivos de IDES
+/.vscode/
+/nbproject/
+.editorconfig
+
+
+#Codeigniter
+/system/
+/application/config/
+
+
+
+#otros
+.htaccess
