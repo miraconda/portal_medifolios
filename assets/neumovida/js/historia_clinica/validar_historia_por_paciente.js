@@ -1,7 +1,18 @@
 'use strict';
 $(document).ready(function () {
     
-    var form = $("#form-registro-paciente").show();
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //Mostramos formulario
+    var form = $("#form-historial-paciente").show();
 
     form.steps({
         headerTag: "h3",
@@ -38,8 +49,15 @@ $(document).ready(function () {
                     return false;
                 }//if                
             }//if
-            
-            
+                                    
+
+            //Consultamos los datos de historia clinica
+            if(currentIndex === 2){      
+                alert();
+                consultarDatosHC();
+            }//if
+
+
             // Needed in some cases if the user went back (clean up)
             if (currentIndex < newIndex) {
                 // To remove error styles
@@ -51,6 +69,10 @@ $(document).ready(function () {
         },
         onStepChanged: function (event, currentIndex, priorIndex) {
 
+            // Used to skip the "Warning" step if the user is old enough.
+            if (currentIndex === 2 && Number($("#age-2").val()) >= 18) {
+                form.steps("next");
+            }
             // Used to skip the "Warning" step if the user is old enough and wants to the previous step.
             if (currentIndex === 2 && priorIndex === 3) {
                 form.steps("previous");
@@ -62,33 +84,11 @@ $(document).ready(function () {
             return form.valid();
         },
         onFinished: function (event, currentIndex) {
-            var data = new FormData();
-            var infoEnviar = {
-                institucion: "neumovida",
-                sede: document.getElementById("paciente-sede").value,
-                documento: document.getElementById("paciente-identificacion").value,
-                pregunta_01: pacienteTelefono,
-                pregunta_02: pacienteDireccion,
-                pregunta_03: pacienteCiudad,
-                password: document.getElementById("password-2").value
-            }
-            data.append("data", JSON.stringify(infoEnviar));
-
-            //Creamos la solicitud de envio tipo FETCH
-            fetch(base_url + 'Registro/crearUsuario', {
-                method: "POST",
-                body: data
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(response) {
-                //Validamos la respuesta del servidor
-                if (response.status) {
-                    vex.dialog.alert(response.message);
-                    window.location = base_url;
-                }else{
-                    vex.dialog.alert(response.message);
-                }//if  
-            })//FETCH 
+            
+            
+            window.location.href = base_url;
+            
+            
         }
     }).validate({
         errorPlacement: function errorPlacement(error, element) {
@@ -289,6 +289,7 @@ function validarPreguntasPaciente(){
             document.getElementById("preguntas_validas").value = 1;
             document.getElementById("div-validar-preguntas").innerHTML = '<span class="badge badge-success">Preguntas validadas exitosamente</span>';
             vex.dialog.alert('Preguntas validadas, puede continuar con el registro.');
+            consultarDatosHC();
             return true;
         }else{
             document.getElementById("preguntas_validas").value = 0;
@@ -300,3 +301,123 @@ function validarPreguntasPaciente(){
 }//function validarPreguntasPaciente()
 
 
+
+/*****************************************************************************************************************************/
+/*****************************************************************************************************************************/
+/*****************************************************************************************************************************/
+function consultarDatosHC(){
+    var data = new FormData();
+    var infoEnviar = {
+        institucion: "neumovida",
+        sede: document.getElementById("paciente-sede").value,
+        documento: document.getElementById("paciente-identificacion").value
+    }
+    data.append("data", JSON.stringify(infoEnviar));
+
+    //Creamos la solicitud de envio tipo FETCH
+    fetch(base_url + 'Historia_Clinica/consultarHistorialClinico', {
+        method: "POST",
+        body: data
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(response) {
+        //Validamos la respuesta del servidor
+        if (response.status) {
+            inicializarTabla(response.data);
+        }else{
+            vex.dialog.alert(response.message);
+        }//if  
+    })//FETCH 
+}//function consultarDatosHC()
+/*****************************************************************************************************************************/
+/*****************************************************************************************************************************/
+/*****************************************************************************************************************************/
+function inicializarTabla(info){
+    //Creamos un objeto de tipo DataTable
+    var tableHistorial = $('#dt-historial').DataTable({
+        //Obtenemos la informacion de los clientes
+        data: info,
+        //Definimos las columnas
+        columns: [
+            { data: "fecha" },
+            { data: "nom_formato" },          
+            { defaultContent: '<button type="button" class="btn btn-info btn-outline-info view-btn"><i class="icofont icofont-eye "></i></button>' }
+        ],
+        //Traduccion de la tabla
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+    });         
+    
+    $('#dt-historial tbody').on('click', '.view-btn', function() {
+        //Obtenemos los atributos de la tabla
+        var data = tableHistorial.row($(this).parents('tr')).data(); 
+        consultarHC(data.cod_historia_cifrado);        
+    });
+    
+    
+
+}//function inicializarTabla
+
+
+
+
+function consultarHC(cod_historia_cifrado){
+    var data = new FormData();
+    var infoEnviar = {
+        institucion: "neumovida",
+        sede: document.getElementById("paciente-sede").value,
+        cod_historia: cod_historia_cifrado,
+        documento: document.getElementById("paciente-identificacion").value
+    }
+    data.append("data", JSON.stringify(infoEnviar));
+
+    //Creamos la solicitud de envio tipo FETCH
+    fetch(base_url + 'Historia_Clinica/consultarHistoriaClinica', {
+        method: "POST",
+        body: data
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(response) {
+        //Validamos la respuesta del servidor
+        if (response.status) {                        
+            var ventana = window.open("","genkkode","width=auto,height=auto,scrollbars=1,resizable=1");
+            ventana.document.open();
+            ventana.document.write(response.data);
+            ventana.document.close();                                    
+        }else{
+            vex.dialog.alert(response.message);
+        }//if  
+    })//FETCH 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}
