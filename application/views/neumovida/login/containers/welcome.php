@@ -215,7 +215,7 @@
                 <div id="pacientes" class="tabcontent">
                     <div class="row modulos-login">
 
-                        <!-- ****LOGIN**** -->
+                        <!-- ****LOGIN**** 
                         <div class="col-12 col-md-6 padding-sm">
                             <div class="card">
                                 <div class="card-body">
@@ -234,7 +234,7 @@
                         </div>
                         <!-- ****/LOGIN**** -->
 
-                        <!-- ****REGISTRO**** -->
+                        <!-- ****REGISTRO**** 
                         <div class="col-12 col-md-6 padding-sm">
                             <div class="card">
                                 <div class="card-body">
@@ -272,7 +272,7 @@
                         </div>               
                         <!-- ****/HISTORIA CLINICA**** -->
 
-                        <!-- ****AGENDA DE CITAS**** -->
+                        <!-- ****AGENDA DE CITAS**** 
                         <div class="col-12 col-md-6 padding-sm">
                             <div class="card">
                                 <div class="card-body">
@@ -291,7 +291,7 @@
                         </div>               
                         <!-- ****/AGENDA DE CITAS**** -->
 
-                        <!-- ****NECESITO QUE CONTACTO**** -->
+                        <!-- ****NECESITO QUE CONTACTO**** 
                         <div class="col-12 col-md-6 padding-sm">
                             <div class="card">
                                 <div class="card-body">
@@ -392,7 +392,7 @@
                     message: 'Para acceder a tu historial clinico directamente debes de iniciar sesion, de lo contrario deberas realizar un pequeño formulario para validar tu identidad.',
                     buttons: [
                         $.extend({}, vex.dialog.buttons.YES, { text: 'Validacion' }),
-                        $.extend({}, vex.dialog.buttons.NO, { text: 'Login' })
+                        //$.extend({}, vex.dialog.buttons.NO, { text: 'Login' })
                     ],
                     callback: function (value) {
                         if (value) {

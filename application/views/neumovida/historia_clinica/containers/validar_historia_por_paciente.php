@@ -205,7 +205,7 @@
                                                                                     
                                                                                     
                                                                                     <div class="table-responsive dt-responsive">
-                                                                                        <table id="dt-historial" class="table table-striped table-bordered nowrap">
+                                                                                        <table id="dt-historial" class="table table-striped table-bordered nowrap" style="width:100%">
                                                                                             <thead>
                                                                                                 <tr>
                                                                                                     <th>Fecha</th>

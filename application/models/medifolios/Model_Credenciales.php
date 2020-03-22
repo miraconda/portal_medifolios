@@ -13,6 +13,11 @@ class Model_Credenciales extends CI_Model{
                 $this->credenciales["codEmpresa"] = "MDAwMDAwMDAwMDA5MDA2ODA5NzQ1OA%253D%253D";
                 $this->credenciales["servidor"] = "www.server3medifolios.net";
                 break;
+            
+            case "neumovida_caldas":
+                $this->credenciales["codEmpresa"] = "MDAwMDAwMDAwMDA5MDEwNDI3NTUwNg%3D%3D";
+                $this->credenciales["servidor"] = "www.server3medifolios.net";
+                break;
 
         }//switch  
     }//function crearCredenciales($entidad)
