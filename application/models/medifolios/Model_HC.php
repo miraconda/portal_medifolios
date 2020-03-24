@@ -63,7 +63,7 @@ class Model_HC extends CI_Model{
         #Iniciamos cUrl
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://".$credenciales["servidor"]."/index.php/api_historia_clinica/get_method/".$credenciales["codEmpresa"]."/obtener_pdf_historia_id_paciente_id_unico_historia_texto/",
+            CURLOPT_URL => "http://".$credenciales["servidor"]."/index.php/api_historia_clinica/get_method/".$credenciales["codEmpresa"]."/obtener_pdf_historia_cod_historia_cifrado/",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -71,7 +71,7 @@ class Model_HC extends CI_Model{
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "codigo_texto=".$cod_historia."&id_paciente=".$documento,
+            CURLOPT_POSTFIELDS => "cod_historia=".$cod_historia,
             CURLOPT_HTTPHEADER => array(
               "Content-Type: application/x-www-form-urlencoded"
             ),

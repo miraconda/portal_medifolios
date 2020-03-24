@@ -400,11 +400,12 @@ function consultarHC(cod_historia_cifrado){
     })
     .then(function(res) { return res.json(); })
     .then(function(response) {
+        console.log(response);
         //Validamos la respuesta del servidor
         if (response.status) {                        
             var ventana = window.open("","genkkode","width=auto,height=auto,scrollbars=1,resizable=1");
             ventana.document.open();
-            ventana.document.write(response.data);
+            ventana.document.write(response.data.data);
             ventana.document.close();                                    
         }else{
             vex.dialog.alert(response.message);
